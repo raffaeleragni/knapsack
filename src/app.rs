@@ -35,7 +35,7 @@ impl Storage {
 
 #[derive(Default)]
 pub struct Item {
-    pub id: u64,
+    pub id: i64,
     pub size: usize,
     pub weight: f64,
     pub selected: bool,
@@ -43,15 +43,16 @@ pub struct Item {
 
 impl App {
     pub fn new(solver: Box<dyn Solver>) -> Self {
-        let mut inventory = Storage::new("Inventory");
-        solver.setup(&mut inventory);
         Self {
-            inventory,
+            inventory: Storage::new("Inventory"),
             capacity: Default::default(),
             sack: Storage::new("Sack"),
             exit: Default::default(),
             solver,
         }
+    }
+    pub fn setup(&mut self) {
+        self.solver.setup(&mut self.inventory);
     }
 
     pub fn run(&mut self, terminal: &mut crate::tui::Tui) -> io::Result<()> {
@@ -74,14 +75,19 @@ impl App {
                 }
             }
         }
-        self.clear_selected();
-        self.solver
-            .step(self.capacity, &mut self.inventory, &mut self.sack);
+        if self.sack.total() < self.capacity {
+            self.clear_selected();
+            self.solver
+                .step(self.capacity, &mut self.inventory, &mut self.sack);
+        }
         Ok(())
     }
 
     fn clear_selected(&mut self) {
-        self.inventory.items.iter_mut().for_each(|i| i.selected = false);
+        self.inventory
+            .items
+            .iter_mut()
+            .for_each(|i| i.selected = false);
         self.sack.items.iter_mut().for_each(|i| i.selected = false);
     }
 }
