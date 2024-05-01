@@ -16,10 +16,11 @@ impl Solver for Transfer {
         inventory: &mut crate::app::Storage,
         sack: &mut crate::app::Storage,
     ) {
-        if sack.total() >= capacity {
-            return;
-        }
         if let Some(item) = inventory.items.pop() {
+            if sack.total() + item.size >= capacity {
+                inventory.items.push(item);
+                return;
+            }
             sack.items.push(item);
         }
     }
