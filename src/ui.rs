@@ -24,6 +24,7 @@ impl Widget for &App {
             .constraints([Constraint::Length(3), Constraint::Min(1)])
             .margin(2)
             .split(area);
+        let score = round::round(self.sack.score(), 1);
         let occupied = self.sack.total();
         let perc_occupied = if self.capacity > 0 {
             occupied * 100 / self.capacity
@@ -40,7 +41,8 @@ impl Widget for &App {
             occupied.to_string().blue(),
             " (".into(),
             perc_occupied,
-            "%)".into(),
+            "%), Score: ".into(),
+            score.to_string().blue(),
         ])]);
         Paragraph::new(occupied_text)
             .centered()

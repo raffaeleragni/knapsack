@@ -28,6 +28,9 @@ impl Storage {
     pub fn total(&self) -> usize {
         self.items.iter().map(|i| i.size).sum()
     }
+    pub fn score(&self) -> f64 {
+        self.items.iter().map(|i| i.weight).sum()
+    }
 }
 
 #[derive(Default)]
