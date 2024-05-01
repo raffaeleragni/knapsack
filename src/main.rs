@@ -17,7 +17,7 @@ fn main() -> Result<()> {
             id: 1,
             size: 10 + i,
             weight: round::round(rng.gen_range(1.0..20.0), 1),
-            selected: (i & 1) == 1,
+            selected: false,
         });
     }
     app.run(&mut terminal)?;
