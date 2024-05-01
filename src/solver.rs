@@ -5,20 +5,21 @@ pub trait Solver {
     fn step(&self, capacity: usize, inventory: &mut Storage, sack: &mut Storage);
 }
 
-pub struct Transfer;
+pub struct Greedy;
 
-impl Solver for Transfer {
-    fn setup(&self, _inventory: &mut Storage) {}
+impl Solver for Greedy {
+    fn setup(&self, inventory: &mut Storage) {
+        inventory.items.sort_by(|a, b| {
+            let arate = a.weight / a.size as f64;
+            let brate = b.weight / b.size as f64;
+            brate.partial_cmp(&arate).unwrap()
+        });
+    }
 
-    fn step(
-        &self,
-        capacity: usize,
-        inventory: &mut crate::app::Storage,
-        sack: &mut crate::app::Storage,
-    ) {
+    fn step(&self, capacity: usize, inventory: &mut Storage, sack: &mut Storage) {
         if let Some(item) = inventory.items.pop() {
             if sack.total() + item.size >= capacity {
-                inventory.items.push(item);
+                inventory.items.insert(0, item);
                 return;
             }
             sack.items.push(item);
