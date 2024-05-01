@@ -74,8 +74,14 @@ impl App {
                 }
             }
         }
+        self.clear_selected();
         self.solver
             .step(self.capacity, &mut self.inventory, &mut self.sack);
         Ok(())
+    }
+
+    fn clear_selected(&mut self) {
+        self.inventory.items.iter_mut().for_each(|i| i.selected = false);
+        self.sack.items.iter_mut().for_each(|i| i.selected = false);
     }
 }

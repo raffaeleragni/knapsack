@@ -17,7 +17,8 @@ impl Solver for Greedy {
     }
 
     fn step(&self, capacity: usize, inventory: &mut Storage, sack: &mut Storage) {
-        if let Some(item) = inventory.items.pop() {
+        if let Some(mut item) = inventory.items.pop() {
+            item.selected = true;
             if sack.total() + item.size >= capacity {
                 inventory.items.insert(0, item);
                 return;
