@@ -97,6 +97,7 @@ impl Widget for &Storage {
 impl<'a> From<&Item> for Span<'a> {
     fn from(val: &Item) -> Self {
         let weight = val.weight.to_string();
+        let weight = weight + " (" + val.rate().to_string().as_str() + ")";
         let text = format!("{:^0width$}", weight, width = val.size);
         Span::from(text).bold().style(
             Style::default()

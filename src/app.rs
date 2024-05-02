@@ -41,6 +41,15 @@ pub struct Item {
     pub selected: bool,
 }
 
+impl Item {
+    pub fn rate(&self) -> f64 {
+        if self.weight == 0.0 || self.size == 0 {
+            return 0.0;
+        }
+        round::round(self.weight / self.size as f64, 1)
+    }
+}
+
 impl App {
     pub fn new(solver: Box<dyn Solver>) -> Self {
         Self {
