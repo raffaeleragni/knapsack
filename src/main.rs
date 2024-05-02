@@ -12,10 +12,10 @@ fn main() -> Result<()> {
     let mut app = app::App::new(Box::new(crate::solver::Greedy {}));
     app.capacity = 100;
     let mut rng = rand::thread_rng();
-    for i in 1..50 {
+    for i in 1..30 {
         app.inventory.items.push(app::Item {
             id: i,
-            size: rng.gen_range(1..20),
+            size: 5 + rng.gen_range(1..30),
             weight: round::round(rng.gen_range(1.0..20.0), 1),
             selected: false,
         });
